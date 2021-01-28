@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="/css/main.css" />
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/css/swiper-3.3.1.min.css" />
+    <link rel="stylesheet" type="text/css" href="/css/element-ui.css" />
+    <script src="/js/echarts.min.js" type="text/javascript"></script>
+    <script src="/js/vue.js" type="text/javascript"></script>
+    <script src="/js/element-ui.js" type="text/javascript"></script>
+    <script src="/js/jquery-1.9.1.min.js" type="text/javascript"></script>
+    <script src="/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="/js/search.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+<header>
+    <div class="container content clearfix">
+        <div class="navbar-header pull-left">
+            <a class="navbar-brand logo" href="javascript:;">
+                <img src="/img/logo.png" alt="">
+            </a>
+        </div>
+        <form class="navbar-form pull-right hidden-xs hz-search">
+            <div class="form-group">
+                <div style="text-align:center;">
+                    <span id="ssu" ></span>
+                </div>
+                <div id="search-left" class="pull-left search-left">
+                    <input id = "name" class="form-control js-search hidden-xs hidden-sm" placeholder="es输入要查找的内容">
+                    <button id="button" class="glyphicon glyphicon-search hidden-xs hidden-sm" style="font-size: 18px;"></button>
+                </div>
+                <div style="text-align:center;">
+                    <span id="ss" ></span>
+                </div>
+                <div id="search" class="pull-left search-left">
+                    <input id = "name1" class="form-control js-search hidden-xs hidden-sm" placeholder="mogodb输入要查找的内容">
+                    <button id="button1" class="glyphicon glyphicon-search hidden-xs hidden-sm" style="font-size: 18px;"></button>
+                </div>
+            </div>
+        </form>
+    </div>
+</header>
+<div id="main1" style="width: 600px;height:300px; margin:0 auto"></div>
+<div id="app" style="width: 6000px;height:300px">
+    <el-table
+            :data="tableData"
+            stripe
+            >
+        <el-table-column
+            prop="id"
+            label="ID"
+            width="150">
+        </el-table-column>
+        <el-table-column
+                prop="name"
+                label="名称"
+                width="150">
+        </el-table-column>
+        <el-table-column
+                prop="subtitle"
+                label="主题"
+                width="150">
+        </el-table-column>
+        <el-table-column
+                prop="keywords"
+                label="关键字"
+                >
+        </el-table-column>
+    </el-table>
+</div>
+<div id="app1" style="width: 6000px;height:300px">
+    <el-table
+            :data="tableData"
+            stripe
+    >
+        <el-table-column
+                prop="id"
+                label="ID"
+                width="100">
+        </el-table-column>
+        <el-table-column
+                prop="memberId"
+                label="memberID"
+                width="100">
+        </el-table-column>
+        <el-table-column
+                prop="memberNickname"
+                label="名称"
+                width="100">
+        </el-table-column>
+        <el-table-column
+                prop="productId"
+                label="产品id"
+                width="100">
+        </el-table-column>
+        <el-table-column
+                prop="productName"
+                label="产品名称"
+                width="100">
+        </el-table-column>
+        <el-table-column
+                prop="createTime"
+                label="创建时间"
+        >
+        </el-table-column>
+    </el-table>
+</div>
+</body>
+<script type="text/javascript">
+function bt(){
+	//获取页面中的数据
+
+var data = [];
+var ne = [];
+var data1=[];
+	var name=$("#name").val();
+	if($.trim(name)==""){
+	  //不符合添加错误提示信息
+		   $("#ssu").html("输入内容不能为空！").css("color","red");
+	       return false;
+	}
+	//把获取的数据异步提交给服务端Controller
+	$.ajax({
+		url:"search/product",
+		type:"get",
+		data:{"keywords":name},
+		dataType:"json",
+		success:function(map){
+		ESInfo = JSON.stringify(map.o)
+		data =JSON.parse(ESInfo);
+		var len = data.length
+		for(i=0;i<data.length;i++){
+           ne.push(data[i].name)
+
+           data1.push({
+            name: data[i].name,
+            value: i+1
+        });
+		}
+		var vm = new Vue({
+          el: '#app',
+            data:{
+          tableData: data
+          }
+        });
+		var myChart = echarts.init(document.getElementById('main1'));
+option = {
+    title: {
+       text: '某站点用户访问来源',
+        subtext: '纯属虚构',
+        left: 'center'
+    },
+    tooltip: {
+        trigger: 'item',
+        formatter: '{a} <br/>{b} : {c} ({d}%)'
+    },
+    legend: {
+        orient: 'vertical',
+        left: 'left',
+        data: ne
+    },
+    series: [
+        {
+            name: '访问来源',
+            type: 'pie',
+            radius: '55%',
+            center: ['50%', '60%'],
+            data:  data1,
+            emphasis: {
+                itemStyle: {
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+            }
+        }
+    ]
+};
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+		},
+		error:function(){
+			//后台异常返回信息
+			alert("系统异常！");
+		}
+
+	});
+	return false;
+}
+<!-- mogodb -->
+function bt1(){
+	//获取页面中的数据
+
+var data = [];
+var ne = [];
+var data1=[];
+	var name=$("#name1").val();
+	if($.trim(name)==""){
+	  //不符合添加错误提示信息
+		   $("#ss").html("输入内容不能为空！").css("color","red");
+	       return false;
+	}
+	//把获取的数据异步提交给服务端Controller
+	$.ajax({
+		url:"list",
+		type:"get",
+		data:{"memberId":name},
+		dataType:"json",
+		success:function(memberReadHistoryList){
+		data=memberReadHistoryList
+		var len = data.length
+		for(i=0;i<data.length;i++){
+           ne.push(data[i].memberNickname)
+
+           data1.push({
+            name: data[i].memberNickname,
+            value: i+1
+        });
+		}
+		var vm = new Vue({
+          el: '#app1',
+            data:{
+          tableData: data
+          }
+        });
+		var myChart = echarts.init(document.getElementById('main1'));
+option = {
+    title: {
+       text: '某站点用户访问来源',
+        subtext: '纯属虚构',
+        left: 'center'
+    },
+    tooltip: {
+        trigger: 'item',
+        formatter: '{a} <br/>{b} : {c} ({d}%)'
+    },
+    legend: {
+        orient: 'vertical',
+        left: 'left',
+        data: ne
+    },
+    series: [
+        {
+            name: '访问来源',
+            type: 'pie',
+            radius: '55%',
+            center: ['50%', '60%'],
+            data:  data1,
+            emphasis: {
+                itemStyle: {
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+            }
+        }
+    ]
+};
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+		},
+		error:function(){
+			//后台异常返回信息
+			alert("系统异常！");
+		}
+
+	});
+	return false;
+}
+</script>
+</html>

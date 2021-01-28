@@ -1,0 +1,113 @@
+package com.lb.cloud.dto;
+
+import java.io.Serializable;
+import java.util.List;
+
+public class User implements Serializable {
+    private int id;
+    private String name;
+    private String password;
+    private String sex;
+    private String state;
+    private String create_time;
+    private String update_time;
+    private String create_id;
+    private String update_id;
+    private List<Role> role;
+
+    public List<Role> getRole() {
+        return role;
+    }
+
+    public void setRole(List<Role> role) {
+        this.role = role;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getCreate_time() {
+        return create_time;
+    }
+
+    public void setCreate_time(String create_time) {
+        this.create_time = create_time;
+    }
+
+    public String getUpdate_time() {
+        return update_time;
+    }
+
+    public void setUpdate_time(String update_time) {
+        this.update_time = update_time;
+    }
+
+    public String getCreate_id() {
+        return create_id;
+    }
+
+    public void setCreate_id(String create_id) {
+        this.create_id = create_id;
+    }
+
+    public String getUpdate_id() {
+        return update_id;
+    }
+
+    public void setUpdate_id(String update_id) {
+        this.update_id = update_id;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", password='" + password + '\'' +
+                ", sex='" + sex + '\'' +
+                ", state='" + state + '\'' +
+                ", create_time='" + create_time + '\'' +
+                ", update_time='" + update_time + '\'' +
+                ", create_id='" + create_id + '\'' +
+                ", update_id='" + update_id + '\'' +
+                ", role=" + role +
+                '}';
+    }
+}

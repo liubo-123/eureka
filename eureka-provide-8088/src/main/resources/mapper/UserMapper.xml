@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lb.cloud.dao.UserMapper">
+  <select id="queryUserByName"  resultType="com.lb.cloud.dto.User">
+    select id,name,password,sex,state,create_time,update_time,create_id,update_id from user where 1=1
+    <if test="name!=null">
+      and name=#{name}
+    </if>
+  </select>
+  <select id="findUserByName"  resultType="com.lb.cloud.dto.User">
+    select name from user where 1=1
+      and name=#{name}
+  </select>
+  <select id="queryRole"  resultType="com.lb.cloud.dto.Role" parameterType="com.lb.cloud.dto.User">
+    select id,name,code,level,parente_code,state,create_time,update_time,create_id,update_id from role where id in
+    (select role_id from user_role where user_id =#{id})
+  </select>
+  <select id="queryPermission"  resultType="com.lb.cloud.dto.Permission" parameterType="com.lb.cloud.dto.Role">
+    select id,name,code,level,parent_code,state,create_time,update_time,create_id,update_id from permission where id in
+    (select permission_id from role_permission where role_id =#{id})
+  </select>
+  <select id="queryMemu"  resultType="com.lb.cloud.dto.Memu" parameterType="com.lb.cloud.dto.Permission">
+  select id,name,code,level,parent_code,state,create_time,update_time,create_id,update_id from memu where id in
+  (select memu_id from permission_memu where permission_id =#{id})
+  </select>
+  <select id="login"  resultType="com.lb.cloud.dto.User">
+    select name from user where 1=1 and name=#{name} and password=#{password}
+  </select>
+  <insert id="register" parameterType="java.lang.String">
+       insert into user (id,name,password,sex,state,create_time,update_time) values (null,#{name},#{password}
+    ,'M','0',now(),now())
+  </insert>
+</mapper>

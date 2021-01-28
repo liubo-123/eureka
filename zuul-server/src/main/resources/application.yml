@@ -1,0 +1,36 @@
+server:
+  port: 8094
+spring:
+  application:
+    name: zuul-service
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8001/eureka/
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
+logging:
+  file: admin-client.log #��ӿ���admin����־���
+zuul:
+  routes: #给服务配置路由
+    user-service:
+      path: /userService/**
+    fegin-service:
+      path: /feignService/**
+  prefix: /lb #给网关路由添加前缀
+#zuul:
+#  routes: #给服务配置路由
+#    user-service:
+#      path: /user-service/**
+#    feign-service:
+#      path: /feign-service/**
+
+

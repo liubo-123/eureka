@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: admin-security-server
+  security: # ���õ�¼�û���������
+    user:
+      name: lb
+      password: 123456
+  boot:  # ����ʾadmin-server�ļ����Ϣ
+    admin:
+      discovery:
+        ignored-services: ${spring.application.name}
+server:
+  port: 9301
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8001/eureka/
+  #自定义jwt key
+jwt:
+  tokenHeader: Authorization #JWT存储的请求头
+  secret: mySecret #JWT加解密使用的密钥
+  expiration: 604800 #JWT的超期限时间(60*60*24)
+  tokenHead: Bearer  #JWT负载中拿到开头

@@ -1,0 +1,23 @@
+service-url:
+  user-service: http://user-service
+spring:
+  application:
+    name: user-ribbon
+server:
+  port: 9088
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
+logging:
+  file: admin-client.log #��ӿ���admin����־���
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8001/eureka/
